@@ -2,8 +2,6 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <schedule />
-    </div>
+    <room />
 </div>
 @endsection
