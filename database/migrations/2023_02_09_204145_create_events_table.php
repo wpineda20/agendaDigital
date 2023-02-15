@@ -25,6 +25,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('schedules')->nullable();
             $table->text('tariff')->nullable();
+            $table->text('site_url')->nullable();
+            $table->text('event_file')->nullable();
             $table->string('color')->default('blue')->nullable();
             $table->string('state')->nullable();
             $table->timestamps();

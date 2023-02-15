@@ -295,7 +295,7 @@ export default {
       });
 
       if (responses) {
-        this.places = responses[1].data.records;
+        this.places = responses[1].data.places;
       }
 
       this.loading = false;

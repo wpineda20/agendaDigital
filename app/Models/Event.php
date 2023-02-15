@@ -27,6 +27,8 @@ class Event extends Model
         'description',
         'schedules',
         'tariff',
+        'site_url',
+        'event_file',
         'color',
         'state',
         'created_at',

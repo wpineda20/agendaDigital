@@ -88,5 +88,8 @@ Route::group(['middleware' => ['auth', 'verified', 'log', 'throttle:web']], func
 Auth::routes(['verify' => true, 'login' => true, 'reset' => true, 'register' => true]);
 
 Route::get('/api/web/room/byPlaceName/{place}', [RoomsController::class, 'byPlaceName']);
+// Route::post('/api/web/zone/allZones', [ZonesController::class, 'allZones']);
+Route::post('/api/web/event/scheduleEvents', [EventsController::class, 'scheduleEvents']);
+Route::post('api/web/event/eventById', [EventsController::class, 'eventById']);
 
 Route::post('import', [ExcelController::class, 'import']);

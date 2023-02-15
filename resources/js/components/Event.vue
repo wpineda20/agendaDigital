@@ -1,5 +1,5 @@
 <template>
-  <div data-app>
+  <div data-app ref="top">
     <alert-time-out
       :redirect="redirectSessionFinished"
       @redirect="updateTimeOut($event)"
@@ -74,6 +74,15 @@
             {{ formTitle }}
           </h1>
         </v-card-title>
+        <v-container v-show="disponibility">
+          <alert
+            :text="textAlert"
+            :event="alertEvent"
+            :show="showAlert"
+            @show-alert="updateAlert($event)"
+            class="mb-2"
+          />
+        </v-container>
 
         <v-card-text>
           <v-container>
@@ -205,6 +214,43 @@
                 />
               </v-col>
               <!-- tariff -->
+              <!-- site_url -->
+              <v-col cols="12" sm="12" md="12">
+                <base-input
+                  label="Enlace del evento"
+                  v-model="$v.editedItem.site_url.$model"
+                  :validation="$v.editedItem.site_url"
+                  validationTextType="none"
+                />
+              </v-col>
+              <!-- site_url -->
+              <!-- event_file -->
+              <v-col cols="12" sm="12" md="12">
+                <h6 class="mb-0 fw-bold text-dark">Adjuntar programa de mano (PDF).</h6>
+                <input-file
+                  accept="application/pdf"
+                  v-model="$v.editedItem.event_file.$model"
+                  :validation="$v.editedItem.event_file"
+                  @update-file="editedItem.event_file = $event"
+                  @file-size-exceeded="$emit('file-size-exceeded', true)"
+                />
+              </v-col>
+              <!-- event_file -->
+              <!-- images -->
+              <v-col cols="12" sm="12" md="12">
+                <v-file-input
+                  @change="updateImage"
+                  accept="image/*"
+                  placeholder="Imagenes del evento"
+                  prepend-icon="mdi-camera"
+                  multiple
+                  outlined
+                  show-size
+                  small-chips
+                  truncate-length="15"
+                ></v-file-input>
+              </v-col>
+              <!-- images -->
             </v-row>
             <!-- Form -->
             <v-row>
@@ -264,9 +310,17 @@
 <script>
 import eventApi from "../apis/eventApi";
 import placeApi from "../apis/placeApi";
-import axios from "axios";
 // import roomApi from "../apis/roomApi";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import axios from "axios";
+import {
+  required,
+  minLength,
+  maxLength,
+  url,
+  helpers,
+} from "vuelidate/lib/validators";
+
+const httpsValid = helpers.regex("https", /^https:\/\//);
 
 export default {
   data() {
@@ -279,8 +333,8 @@ export default {
         { text: "EVENTO", value: "event_name" },
         { text: "ELENCO", value: "cast_name" },
         { text: "FECHA", value: "event_date" },
-        { text: "HORA INICIO", value: "start_hour_event" },
-        { text: "HORA FIN", value: "end_hour_event" },
+        { text: "LUGAR", value: "place_name" },
+        { text: "ESPACIO", value: "room_name" },
         { text: "ACCIONES", value: "actions", sortable: false },
       ],
       records: [],
@@ -301,6 +355,9 @@ export default {
         schedules: "",
         description: "",
         tariff: "",
+        site_url: "",
+        event_file: "",
+        images: [],
         // color: "",
         // state: "",
       },
@@ -316,6 +373,9 @@ export default {
         schedules: "",
         description: "",
         tariff: "",
+        site_url: "",
+        event_file: "",
+        images: [],
         // color: "",
         // state: "",
       },
@@ -329,6 +389,7 @@ export default {
       alertTimeOut: 0,
       rooms: [],
       places: [],
+      disponibility: false,
     };
   },
 
@@ -395,6 +456,21 @@ export default {
         minLength: minLength(0),
         maxLength: maxLength(330),
       },
+      site_url: {
+        required,
+        url,
+        https: httpsValid,
+        minLength: minLength(1),
+        maxLength: maxLength(500),
+      },
+      event_file: {
+        required,
+        minLength: minLength(0),
+      },
+      images: {
+        // required,
+        minLength: minLength(0),
+      },
     },
   },
 
@@ -419,6 +495,13 @@ export default {
       val || this.closeBlock();
     },
   },
+
+  // props: {
+  //   image: {
+  //     type: Object,
+  //     default: "",
+  //   },
+  // },
 
   created() {
     this.initialize();
@@ -450,6 +533,7 @@ export default {
       if (responses) {
         this.places = responses[1].data.places;
       }
+
       this.loading = false;
     },
 
@@ -458,6 +542,7 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.selectedTab = 0;
       this.dialog = true;
+      console.log(this.editedItem);
     },
 
     close() {
@@ -499,8 +584,13 @@ export default {
         if (data.success) {
           this.updateAlert(true, data.message, "success");
         }
+        if (data.state == "error") {
+          this.updateAlert(true, data.message, "fail");
+        }
+
+        this.close();
+        this.initialize();
       } else {
-        // console.log(this.editedItem);
         const { data } = await eventApi
           .post(null, this.editedItem)
           .catch((error) => {
@@ -511,19 +601,23 @@ export default {
               419
             );
           });
-        // console.log(data);
+
         if (data.success) {
           this.updateAlert(true, data.message, "success");
+          this.close();
+          this.initialize();
+        }
+
+        if (data.state == "error") {
+          this.disponibility = true;
+          if (this.disponibility) {
+            this.updateAlert(true, data.message, "fail");
+          }
         }
       }
-
-      this.close();
-      this.initialize();
-      return;
     },
 
     deleteItem(item = null) {
-      console.log(item);
       if (item) {
         this.editedIndex = this.recordsFiltered.indexOf(item);
         this.editedItem = Object.assign({}, item);
@@ -606,10 +700,14 @@ export default {
       this.$v.$reset();
     },
 
-    updateAlert(show = false, text = "Alerta", event = "success") {
+    updateAlert(show = false, text = "Alerta", event = "success", time = 5000) {
       this.textAlert = text;
       this.alertEvent = event;
       this.showAlert = show;
+      this.time = time;
+      if (show) {
+        this.$refs.top.scrollIntoView();
+      }
     },
 
     async changeRooms() {
@@ -625,6 +723,30 @@ export default {
 
       this.rooms = data.rooms;
     },
+
+    async updateImage(e) {
+      //console.log(e);
+      // return;
+      const image = await this.toBase64(e);
+      this.$emit("update-image", image);
+      // this.imagePreview = image;
+      //   this.validation.$model = image;
+    },
+
+    async toBase64(file) {
+      console.log(file);
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    },
   },
 };
 </script>
+<style>
+.mdi-camera::before {
+  color: #2d52a8 !important;
+}
+</style>

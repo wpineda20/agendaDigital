@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Event;
+use App\Models\EventImages;
+use Illuminate\Support\Facades\Storage;
+use DB;
 
 use Illuminate\Http\Request;
 use Encrypt;
@@ -53,9 +56,29 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
+
+        //Validation schedules
+        $disponibility = $this->validateSchedules($request->all());
+
+        if (
+            $disponibility['total'] > 0
+        ) {
+            return response()->json([
+                'success' => false,
+                'status' => 200,
+                'message' => $disponibility['message'],
+                'state' => 'error',
+            ]);
+        }
+
         $data = $request->except(['place_name']);
 
-        // dd($data);
+        if ($data['event_file']) {
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-file', 'event_file');
+        }
+
+        $eventFile = asset($data['event_file']);
+
         $events = Event::create([
             'event_name' => $data['event_name'],
             'cast_name' => $data['cast_name'],
@@ -66,7 +89,9 @@ class EventsController extends Controller
             'location' => $data['location'],
             'schedules' => $data['schedules'],
             'description' => $data['description'],
+            'site_url' => $data['site_url'],
             'tariff' => $data['tariff'],
+            'event_file' => $eventFile,
             'state' => "Pendiente",
         ]);
 
@@ -79,6 +104,53 @@ class EventsController extends Controller
             "message" => "Registro creado correctamente.",
             "success" => true,
         ]);
+    }
+
+    /**
+     * Validate Primary Event
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function validateSchedules(array $data)
+    {
+        $disponibility = [
+            'total' => 0,
+            'messsage' => "Compruebe la disponibilidad de los eventos.",
+        ];
+
+        $startDate = date("Hi", strtotime($data['event_date'] . " " . $data['start_hour_event']));
+        $endDate = date("Hi", strtotime($data['event_date'] . " " . $data['end_hour_event']));
+
+
+        if ($startDate >= $endDate) {
+            $disponibility['message'] = "La hora de inicio del evento no puede ser igual o mayor que la de fin.";
+            $disponibility['total'] = 1;
+
+            return $disponibility;
+        }
+
+        if ($data['event_date'] <= now()) {
+            $disponibility['message'] = "La fecha del evento no puede ser menor o igual a la fecha actual.";
+            $disponibility['total'] = 1;
+
+            return $disponibility;
+        }
+
+        $total = Event::join('rooms', 'rooms.id', '=', 'events.room_id')
+            ->where('room_name', $data['room_name'])
+            ->where('event_date', $data['event_date'])
+            ->whereRaw(
+                "(start_hour_event >= ? and end_hour_event <= ?)",
+                [$data['start_hour_event'], $data['end_hour_event']]
+            )
+            ->count();
+
+        $disponibility['total'] = $total;
+        $disponibility['message'] = 'Comprueba la disponibilidad de horarios.';
+
+        return $disponibility;
     }
 
     /**
@@ -101,21 +173,45 @@ class EventsController extends Controller
      */
     public function update(Request $request)
     {
+        //Validation schedules
+        // $disponibility = $this->validateSchedules($request->all());
+
+        // if (
+        //     $disponibility['total'] > 0
+        // ) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'status' => 200,
+        //         'message' => $disponibility['message'],
+        //         'state' => 'error',
+        //     ]);
+        // }
+        // dd($request);
         $data = Encrypt::decryptArray($request->all(), 'id');
 
-        $events = Event::where('id', $data['id'])->first();
-        $events->event_name = $request->event_name;
-        $events->event_date = $request->event_date;
-        $events->start_hour_event = $request->start_hour_event;
-        $events->end_hour_event = $request->end_hour_event;
-        $events->room_id = Event::where('room_name', $request->room_name)->first()->id;
-        $events->description = $request->description;
-        $events->tariff = $request->tariff;
-        $events->color = $request->color;
-        $events->state = $request->state;
-        $events->deleted_at = $request->deleted_at;
+        $room = Room::where('room_name', $request->room_name)->first();
 
-        $events->save();
+        if ($data['event_file']) {
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-file', 'event_file');
+        }
+
+        $eventFile = asset($data['event_file']);
+
+        Event::where('id', $data['id'])->update([
+            'event_name' => $data['event_name'],
+            'cast_name' => $data['cast_name'],
+            'event_date' => $data['event_date'],
+            'start_hour_event' => $data['start_hour_event'],
+            'end_hour_event' => $data['end_hour_event'],
+            'room_id' => $room->id,
+            'location' => $data['location'],
+            'schedules' => $data['schedules'],
+            'description' => $data['description'],
+            'site_url' => $data['site_url'],
+            'event_file' => $eventFile,
+            'tariff' => $data['tariff'],
+            'state' => "Pendiente",
+        ]);
 
         return response()->json([
             "status" => 200,
@@ -157,5 +253,50 @@ class EventsController extends Controller
             "message" => "Registro eliminado correctamente.",
             "success" => true,
         ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function scheduleEvents(Request $request)
+    {
+        $scheduleEvents = Event::select(
+            'events.*',
+            'events.id as event_id',
+            'rooms.room_name',
+            'places.place_name'
+        )
+            ->join('rooms', 'events.room_id', '=', 'rooms.id')
+            ->join('places', 'rooms.place_id', '=', 'places.id')
+            // ->orderBy('events.id', 'desc')
+            ->get();
+
+        foreach ($scheduleEvents as $event) {
+            $event->images = EventImages::where('id', $event->id)->get();
+        }
+
+        return response()->json(['message' => 'success', 'scheduleEvents' => $scheduleEvents]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function eventById(Request $request)
+    {
+        $event_id = $request->params['id'];
+
+        $events = DB::table('events as e')
+            ->select('e.*')
+            ->where('e.id', $event_id)
+            ->get();
+
+        foreach ($events as $event) {
+            $event->images = EventImages::where('id', $event->id)->get();
+        }
+
+        return response()->json(['message' => 'success', 'events' => $events]);
     }
 }

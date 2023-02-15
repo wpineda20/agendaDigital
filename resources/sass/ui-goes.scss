@@ -529,3 +529,228 @@ select:-webkit-autofill {
     fieldset {
     border-color: $blue-primary !important;
 }
+
+//Agenda
+
+.schedule-content{
+    display: flex;
+}
+.card-image{
+    width: 100%;
+    height: 8rem;
+}
+.schedule-left{
+    width: 70%;
+}
+.schedule-right{
+    width: 30%;
+}
+.card-schedule{
+    background-color: $white;
+    box-shadow: 4px 4px 12px 1px rgba(210, 210, 210, 0.911);
+}
+.card-schedule-body{
+    padding: 2rem 4rem;
+}
+.card-search{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+.search-input{
+    width: 60%;
+}
+.search-item{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    // filter: invert(19%) sepia(13%) saturate(856%) hue-rotate(177deg) brightness(96%) contrast(90%);
+    background-color: #F4F4F4;
+}
+.schedule-title{
+    font-weight: 700;
+    font-size: 32px;
+}
+.underline-title{
+    font-weight: 700;
+    font-size: 32px;
+    text-decoration: underline #095CE0 5px;
+}
+.card-event-title{
+    font-weight: 700;
+    line-height: 30px;
+    font-size: 26px;
+    text-decoration: underline #095CE0 3px;
+}
+.card-content{
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    // padding: 2;
+    grid-row: auto auto;
+    grid-row-gap: 20px;
+    grid-column-gap: 20px;
+    width: 100%;
+    overflow: auto;
+    height: 55rem;
+}
+.card-events{
+    padding: 0.5rem 1.5rem;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    border: 2px solid lightgray !important;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+.card-img{
+    height: 15rem;
+    width: 100%;
+    border-radius: 10px;
+}
+.card-event-text{
+    // color: rgb(185, 184, 184);
+    padding-top: 1rem;
+    line-height: 1rem;
+    // color:grey;
+    color: $grey-secondary-light;
+    margin-bottom: 0px;
+}
+.card-event-text .cast-name{
+    color: black !important;
+    font-weight: 700;
+}
+.modal-event-title {
+    font-weight: 700;
+    line-height: 30px;
+    font-size: 40px;
+    text-decoration: underline #095CE0 3px;
+    margin-bottom: 0px;
+}
+.modal-description{
+    color: $grey-secondary-light;
+}
+.modal-items{
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 12px;
+}
+.modal-button{
+    background-color: rgb(238, 238, 238);
+    color: $grey-secondary-light;
+    display: flex;
+    line-height: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    width: 200px;
+    text-align: center;
+    font-weight: 500;
+}
+.modal-shop{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgb(238, 238, 238);
+}
+.modal-shop img{
+    filter: invert(94%) sepia(9%) saturate(157%) hue-rotate(185deg) brightness(87%) contrast(85%);
+}
+// Scroll Bar
+
+::-webkit-scrollbar {
+    width: 10px;
+    // width: 0.9rem;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(236, 236, 236);
+    border-radius: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border: 3px solid transparent;
+    border-radius: 9px;
+    background-clip: content-box;
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .schedule-content{
+        flex-direction: column-reverse;
+    }
+    .schedule-left {
+        width: 100%;
+    }
+    .schedule-right {
+        width: 100%;
+    }
+    .card-schedule-body{
+        padding: 0 1.5rem;
+    }
+    .card-content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 15px;
+        // overflow: clip;
+        height: 100%;
+    }
+    .search-input {
+        width: 100%;
+    }
+    .search-item {
+        display: none ;
+    }
+    .modal-items {
+        gap: 16px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width:768px) and (max-width:1024px) {
+    .schedule-content {
+        flex-direction: column-reverse;
+    }
+    .schedule-left {
+        width: 100%;
+    }
+    .schedule-right {
+        width: 100%;
+    }
+    .card-schedule-body {
+        padding: 0 1.5rem;
+    }
+    .card-content {
+        display: grid;
+        grid-template-columns: 2fr 2fr;
+        padding: 2rem 0;
+        grid-row: auto auto;
+        grid-row-gap: 40px;
+        grid-column-gap: 42px;
+        width: 100%;
+        height: 100%;
+        // overflow: clip;
+    }
+    .card-search{
+        padding-top: 1rem;
+    }
+}
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1400px) {
+    .card-events {
+        padding: 0.5rem 1.5rem;
+    }
+}

@@ -135,4 +135,15 @@ class ZonesController extends Controller
             "success" => true,
         ]);
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function allZones(Request $request)
+    {
+        $zones = Zone::all();
+
+        return response()->json(['message' => 'success', 'zones' => $zones]);
+    }
 }

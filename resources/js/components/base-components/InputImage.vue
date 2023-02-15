@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      imagePreview: "/img/default_image.svg",
+      imagePreview: "",
       fileName: "",
       sizeFile: "",
     };
@@ -63,7 +63,7 @@ export default {
     },
     image: {
       type: String,
-      default: "/img/default_image.svg",
+      default: "",
     },
   },
 
