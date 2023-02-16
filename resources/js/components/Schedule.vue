@@ -11,10 +11,13 @@
     <div class="schedule-content">
       <div class="schedule-left">
         <div class="card-schedule">
+          <!-- Schedule Banner -->
           <div class="card-schedule-header">
             <img class="card-image" src="/logos/Logo_GOES_horizontal_D.svg" />
           </div>
+          <!-- Schedule Banner -->
           <div class="card-schedule-body">
+            <!-- Schedule Search -->
             <div class="card-search">
               <div class="search-input">
                 <v-text-field
@@ -35,8 +38,20 @@
                 />
               </div>
             </div>
+            <!-- Schedule Search -->
             <div class="scroll">
               <loader v-if="loading"> </loader>
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+                class="text-center"
+                v-if="events.length == 0"
+              >
+                <h4 class="fw-bold">
+                  No hay eventos programados para este día
+                </h4>
+              </v-col>
               <div class="card-content">
                 <div
                   class="card-item"
@@ -49,7 +64,7 @@
                       <p class="card-event-title" v-if="event.event_name">
                         {{ event.event_name }}
                       </p>
-                      <img src="/img/ballet.jpg" class="card-img" alt="" />
+                      <img :src="event.cover_image" class="card-img" alt="" />
                       <p class="card-event-text">
                         <span class="cast-name" v-if="event.cast_name"
                           >{{ event.cast_name }} </span
@@ -67,15 +82,6 @@
                     </v-card>
                   </a>
                 </div>
-                <v-col
-                  cols="12"
-                  sm="12"
-                  md="12"
-                  class="text-center"
-                  v-if="events.length == 0"
-                >
-                  <h4 class="fw-bold">No hay eventos por mostrar</h4>
-                </v-col>
               </div>
             </div>
           </div>
@@ -84,7 +90,8 @@
       <div class="schedule-right"></div>
     </div>
 
-    <v-dialog v-model="dialog" class="m-0 p-0" width="600px" persistent>
+    <!-- Modal -->
+    <v-dialog v-model="dialog" class="m-0 p-0" width="600px">
       <v-card>
         <v-container>
           <v-row fluid class="fluid">
@@ -118,7 +125,7 @@
               <p class="modal-description">{{ eventModal.description }}</p>
             </v-col>
             <div class="modal-items">
-              <div class="modal-button">
+              <div class="modal-button" v-if="eventModal.event_file">
                 <a :href="eventModal.event_file" download="Programa de mano">
                   <span>Descarga de programa de mano</span>
                 </a>
@@ -133,11 +140,11 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <!-- Modal -->
   </div>
 </template>
 
 <script>
-// import zoneApi from "../apis/zoneApi";
 import axios from "axios";
 import eventApi from "../apis/eventApi";
 import lib from "../libs/function";
@@ -160,8 +167,6 @@ export default {
     },
     events: {},
     eventModal: {},
-    // model: 0,
-    // colors: ["#00000", "secondary", "yellow darken-2", "red", "orange"],
   }),
   validations: {
     editedItem: {
@@ -172,7 +177,6 @@ export default {
     },
   },
   mounted() {
-    // this.$refs.calendar.checkChange();
     this.initialize();
   },
   methods: {

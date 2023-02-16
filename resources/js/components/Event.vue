@@ -217,7 +217,7 @@
               <!-- site_url -->
               <v-col cols="12" sm="12" md="12">
                 <base-input
-                  label="Enlace del evento"
+                  label="Enlace de compra de tickets del evento"
                   v-model="$v.editedItem.site_url.$model"
                   :validation="$v.editedItem.site_url"
                   validationTextType="none"
@@ -225,8 +225,10 @@
               </v-col>
               <!-- site_url -->
               <!-- event_file -->
-              <v-col cols="12" sm="12" md="12">
-                <h6 class="mb-0 fw-bold text-dark">Adjuntar programa de mano (PDF).</h6>
+              <v-col cols="12" sm="12" md="6">
+                <h6 class="mb-0 fw-bold text-dark">
+                  Adjuntar programa de mano (PDF).
+                </h6>
                 <input-file
                   accept="application/pdf"
                   v-model="$v.editedItem.event_file.$model"
@@ -236,11 +238,25 @@
                 />
               </v-col>
               <!-- event_file -->
+              <!-- cover_image -->
+              <v-col cols="12" sm="12" md="6">
+                <h6 class="mb-0 fw-bold text-dark">
+                  Adjuntar portada del evento.
+                </h6>
+                <span class="text-left">(Máximo 5MB | png, jpg, jpeg)</span>
+                <input-image
+                  v-model="$v.editedItem.cover_image.$model"
+                  :validation="$v.editedItem.cover_image"
+                  :image="editedItem.cover_image"
+                  @update-image="editedItem.cover_image = $event"
+                />
+              </v-col>
+              <!-- cover_image -->
               <!-- images -->
-              <v-col cols="12" sm="12" md="12">
+              <!-- <v-col cols="12" sm="12" md="12">
                 <v-file-input
                   @change="updateImage"
-                  accept="image/*"
+                  accept="image/*" 
                   placeholder="Imagenes del evento"
                   prepend-icon="mdi-camera"
                   multiple
@@ -249,7 +265,7 @@
                   small-chips
                   truncate-length="15"
                 ></v-file-input>
-              </v-col>
+              </v-col> -->
               <!-- images -->
             </v-row>
             <!-- Form -->
@@ -310,6 +326,7 @@
 <script>
 import eventApi from "../apis/eventApi";
 import placeApi from "../apis/placeApi";
+import lib from "../libs/function";
 // import roomApi from "../apis/roomApi";
 import axios from "axios";
 import {
@@ -357,6 +374,7 @@ export default {
         tariff: "",
         site_url: "",
         event_file: "",
+        cover_image: "",
         images: [],
         // color: "",
         // state: "",
@@ -375,6 +393,7 @@ export default {
         tariff: "",
         site_url: "",
         event_file: "",
+        cover_image: "",
         images: [],
         // color: "",
         // state: "",
@@ -464,6 +483,10 @@ export default {
         maxLength: maxLength(500),
       },
       event_file: {
+        //required,
+        //minLength: minLength(0),
+      },
+      cover_image: {
         required,
         minLength: minLength(0),
       },
@@ -591,6 +614,7 @@ export default {
         this.close();
         this.initialize();
       } else {
+        // console.log(this.editedItem);
         const { data } = await eventApi
           .post(null, this.editedItem)
           .catch((error) => {
@@ -722,25 +746,6 @@ export default {
         });
 
       this.rooms = data.rooms;
-    },
-
-    async updateImage(e) {
-      //console.log(e);
-      // return;
-      const image = await this.toBase64(e);
-      this.$emit("update-image", image);
-      // this.imagePreview = image;
-      //   this.validation.$model = image;
-    },
-
-    async toBase64(file) {
-      console.log(file);
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
     },
   },
 };

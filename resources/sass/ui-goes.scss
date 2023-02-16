@@ -592,7 +592,7 @@ select:-webkit-autofill {
     grid-column-gap: 20px;
     width: 100%;
     overflow: auto;
-    height: 55rem;
+    max-height: 55rem;
 }
 .card-events{
     padding: 0.5rem 1.5rem;
@@ -607,6 +607,7 @@ select:-webkit-autofill {
     height: 15rem;
     width: 100%;
     border-radius: 10px;
+    object-fit: cover;
 }
 .card-event-text{
     // color: rgb(185, 184, 184);
@@ -692,7 +693,7 @@ select:-webkit-autofill {
         width: 100%;
     }
     .card-schedule-body{
-        padding: 0 1.5rem;
+        padding: 1.5rem 0rem;
     }
     .card-content {
         display: flex;
@@ -710,6 +711,9 @@ select:-webkit-autofill {
     }
     .modal-items {
         gap: 16px;
+    }
+    .card-search{
+        padding: 1rem;
     }
 }
 
@@ -734,7 +738,7 @@ select:-webkit-autofill {
     .card-content {
         display: grid;
         grid-template-columns: 2fr 2fr;
-        padding: 2rem 0;
+        padding: 0 0 2rem 0;
         grid-row: auto auto;
         grid-row-gap: 40px;
         grid-column-gap: 42px;

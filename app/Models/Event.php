@@ -29,6 +29,7 @@ class Event extends Model
         'tariff',
         'site_url',
         'event_file',
+        'cover_image',
         'color',
         'state',
         'created_at',

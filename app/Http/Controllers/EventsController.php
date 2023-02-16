@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventImages;
 use Illuminate\Support\Facades\Storage;
 use DB;
+use Crypt;
 
 use Illuminate\Http\Request;
 use Encrypt;
@@ -74,10 +75,18 @@ class EventsController extends Controller
         $data = $request->except(['place_name']);
 
         if ($data['event_file']) {
-            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-file', 'event_file');
+
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+
+            $eventFile = asset($data['event_file']);
         }
 
-        $eventFile = asset($data['event_file']);
+        if (FileController::verifyTypeImage($data['cover_image'])) {
+
+            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-dHs") . '-cover', 'cover_image');
+
+            $coverImage = asset($data['cover_image']);
+        }
 
         $events = Event::create([
             'event_name' => $data['event_name'],
@@ -92,10 +101,9 @@ class EventsController extends Controller
             'site_url' => $data['site_url'],
             'tariff' => $data['tariff'],
             'event_file' => $eventFile,
+            'cover_image' => $coverImage,
             'state' => "Pendiente",
         ]);
-
-        // dd($events);
 
         $events->save();
 
@@ -131,12 +139,12 @@ class EventsController extends Controller
             return $disponibility;
         }
 
-        if ($data['event_date'] <= now()) {
-            $disponibility['message'] = "La fecha del evento no puede ser menor o igual a la fecha actual.";
-            $disponibility['total'] = 1;
+        // if ($data['event_date'] <= now()) {
+        //     $disponibility['message'] = "La fecha del evento no puede ser menor o igual a la fecha actual.";
+        //     $disponibility['total'] = 1;
 
-            return $disponibility;
-        }
+        //     return $disponibility;
+        // }
 
         $total = Event::join('rooms', 'rooms.id', '=', 'events.room_id')
             ->where('room_name', $data['room_name'])
@@ -173,29 +181,27 @@ class EventsController extends Controller
      */
     public function update(Request $request)
     {
-        //Validation schedules
-        // $disponibility = $this->validateSchedules($request->all());
-
-        // if (
-        //     $disponibility['total'] > 0
-        // ) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'status' => 200,
-        //         'message' => $disponibility['message'],
-        //         'state' => 'error',
-        //     ]);
-        // }
-        // dd($request);
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $room = Room::where('room_name', $request->room_name)->first();
 
-        if ($data['event_file']) {
-            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-file', 'event_file');
+        // dd($data);
+        // dd(substr($data['event_file'], 0, 20));
+        // substr($data['event_file'], 0, -1);
+
+        if (substr($data['event_file'], 0, 20) == "data:application/pdf") {
+
+            $eventFile = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+        } else {
+            $eventFile = $data['event_file'];
         }
 
-        $eventFile = asset($data['event_file']);
+        if (FileController::verifyTypeImage($data['cover_image'])) {
+
+            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-dHs") . '-cover', 'cover_image');
+
+            // $coverImage = asset($data['cover_image']);
+        }
 
         Event::where('id', $data['id'])->update([
             'event_name' => $data['event_name'],
@@ -209,6 +215,7 @@ class EventsController extends Controller
             'description' => $data['description'],
             'site_url' => $data['site_url'],
             'event_file' => $eventFile,
+            'cover_image' => $data['cover_image'],
             'tariff' => $data['tariff'],
             'state' => "Pendiente",
         ]);
@@ -273,7 +280,9 @@ class EventsController extends Controller
             // ->orderBy('events.id', 'desc')
             ->get();
 
+
         foreach ($scheduleEvents as $event) {
+
             $event->images = EventImages::where('id', $event->id)->get();
         }
 

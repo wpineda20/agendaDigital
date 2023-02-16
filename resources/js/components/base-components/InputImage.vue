@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="my-auto mx-auto text-center">
-      <img :src="imagePreview" alt="" width="200px" height="auto" />
-    </div>
     <a href="#" @click="clickInputFile()" class="button-center">
       <i class="material-icons icon-center">folder</i> Seleccionar imagen</a
     >
+    <div class="my-auto">
+      <img :src="imagePreview" alt="" width="100px" height="auto" />
+    </div>
     <input
       type="file"
       ref="inputImage"
@@ -44,7 +44,7 @@ export default {
   },
 
   updated() {
-    this.image = this.validation.$model;
+    // this.image = this.validation.$model;
     // console.log(this.image);
   },
 
@@ -84,10 +84,22 @@ export default {
 
   methods: {
     async updateImage(e) {
+      // console.log(e);
+      //   Validate size 5mb
+      const size = e.target.files[0].size / 1024 / 1024;
+      if (size > 5) {
+        // console.log(size);
+        this.$emit("update-alert", {
+          show: true,
+          message: "El tamaño de la imagen debe ser inferior a 5Mb.",
+          type: "fail",
+        });
+        return;
+      }
+
       const image = await this.toBase64(e.target.files[0]);
       this.$emit("update-image", image);
       this.imagePreview = image;
-      //   this.validation.$model = image;
     },
 
     async toBase64(file) {
