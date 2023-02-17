@@ -534,6 +534,7 @@ select:-webkit-autofill {
 
 .schedule-content{
     display: flex;
+    justify-content: space-between;
 }
 .card-image{
     width: 100%;
@@ -544,6 +545,8 @@ select:-webkit-autofill {
 }
 .schedule-right{
     width: 30%;
+    display: flex;
+    justify-content: flex-end;
 }
 .card-schedule{
     background-color: $white;
@@ -556,7 +559,7 @@ select:-webkit-autofill {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
 }
 .search-input{
     width: 60%;
@@ -568,7 +571,7 @@ select:-webkit-autofill {
     border-color: transparent !important;
 }
 .search-input .theme--light.v-input,
-.theme--light.v-input input{
+.search-input .theme--light.v-input input{
     color: grey;
     font-weight: bold;
 }
@@ -578,10 +581,6 @@ select:-webkit-autofill {
     justify-content: center;
     // filter: invert(19%) sepia(13%) saturate(856%) hue-rotate(177deg) brightness(96%) contrast(90%);
     background-color: #F4F4F4;
-}
-.schedule-title{
-    font-weight: 700;
-    font-size: 32px;
 }
 .underline-title{
     font-weight: 700;
@@ -672,6 +671,42 @@ select:-webkit-autofill {
 .modal-shop img{
     filter: invert(94%) sepia(9%) saturate(157%) hue-rotate(185deg) brightness(87%) contrast(85%);
 }
+
+// Calendar
+
+.v-picker__title {
+    display: none !important;
+}
+.v-date-picker-header, .v-date-picker-table {
+    background-color: #F4F7FD !important;
+}
+.theme--light.v-date-picker-table th{
+    color: #095CE0 !important;
+}
+.v-date-picker-table--date td .v-btn__content{
+    font-weight: bold !important;
+}
+.theme--light.v-date-picker-table th {
+    color: #095CE0 !important;
+}
+td .v-btn--rounded{
+    border-radius: 6px !important;
+}
+.accent--text{
+    background-color: #095CE0 !important;
+    color: $white !important;
+}
+.v-date-picker-header .accent--text{
+    background-color: transparent !important;
+}
+.schedule-title {
+    font-weight: bold !important;
+    line-height: 30px;
+    font-size: 28px;
+    margin-bottom: 0;
+    padding: 4px 20px;
+    text-decoration: underline #095CE0 3px;
+}
 // Scroll Bar
 
 ::-webkit-scrollbar {
@@ -696,11 +731,9 @@ select:-webkit-autofill {
 @media only screen and (max-width: 600px) {
     .schedule-content{
         flex-direction: column-reverse;
+        gap: 20px;
     }
     .schedule-left {
-        width: 100%;
-    }
-    .schedule-right {
         width: 100%;
     }
     .card-schedule-body{
@@ -725,6 +758,11 @@ select:-webkit-autofill {
     .card-search{
         padding: 1rem;
     }
+    .schedule-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -735,13 +773,16 @@ select:-webkit-autofill {
 @media (min-width:768px) and (max-width:1024px) {
     .schedule-content {
         flex-direction: column-reverse;
+        gap: 20px;
     }
     .schedule-left {
         width: 100%;
     }
-    .schedule-right {
-        width: 100%;
-    }
+   .schedule-right {
+       width: 100%;
+       display: flex;
+       justify-content: center;
+   }
     .card-schedule-body {
         padding: 0 1.5rem;
     }

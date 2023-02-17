@@ -271,6 +271,8 @@ class EventsController extends Controller
      */
     public function scheduleEvents(Request $request)
     {
+        $current_date = date('Y-m-d');
+
         $scheduleEvents = Event::select(
             'events.*',
             'events.id as event_id',
@@ -279,9 +281,8 @@ class EventsController extends Controller
         )
             ->join('rooms', 'events.room_id', '=', 'rooms.id')
             ->join('places', 'rooms.place_id', '=', 'places.id')
-            // ->orderBy('events.id', 'desc')
+            ->whereDate('events.event_date', $current_date)
             ->get();
-
 
         foreach ($scheduleEvents as $event) {
 
@@ -295,18 +296,60 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function eventById(Request $request)
+    public function searchByCalendar(Request $request)
     {
-        $event_id = $request->params['id'];
+        $date = $request->params['date'];
+        // dd($date);
 
-        $events = DB::table('events as e')
-            ->select('e.*')
-            ->where('e.id', $event_id)
+        $events = Event::select(
+            'events.*',
+            'events.id as event_id',
+            'rooms.room_name',
+            'places.place_name'
+        )
+            ->join('rooms', 'events.room_id', '=', 'rooms.id')
+            ->join('places', 'rooms.place_id', '=', 'places.id')
+            ->whereDate('events.event_date', $date)
             ->get();
 
         foreach ($events as $event) {
+
             $event->images = EventImages::where('id', $event->id)->get();
         }
+        // dd($events);
+
+        return response()->json(['message' => 'success', 'events' => $events]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function searchEvents(Request $request)
+    {
+        $event_name = $request->params['search'];
+        // dd($event_name);
+
+        $events = Event::select(
+            'events.*',
+            'events.id as event_id',
+            'rooms.room_name',
+            'places.place_name'
+        )
+            ->join('rooms', 'events.room_id', '=', 'rooms.id')
+            ->join('places', 'rooms.place_id', '=', 'places.id')
+            ->where(
+                'events.event_name',
+                'like',
+                $event_name . '%'
+            )
+            ->get();
+
+        foreach ($events as $event) {
+
+            $event->images = EventImages::where('id', $event->id)->get();
+        }
+        // dd($events);
 
         return response()->json(['message' => 'success', 'events' => $events]);
     }

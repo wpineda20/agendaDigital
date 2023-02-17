@@ -27,6 +27,8 @@
                   filled
                   placeholder="Busca tu actividad cultural preferida"
                   type="text"
+                  v-model="search"
+                  @keyup="searchEvent()"
                 ></v-text-field>
               </div>
               <div class="search-item">
@@ -48,13 +50,13 @@
                 sm="12"
                 md="12"
                 class="text-center"
-                v-if="events.length == 0"
+                v-if="events.length == 0 && !loading"
               >
                 <h4 class="fw-bold">
                   No hay eventos programados para este día
                 </h4>
               </v-col>
-              <div class="card-content">
+              <div class="card-content" v-if="events.length != 0 && !loading">
                 <div
                   class="card-item"
                   style="margin: 0px !important"
@@ -89,7 +91,17 @@
           </div>
         </div>
       </div>
-      <div class="schedule-right"></div>
+      <div class="schedule-right">
+        <div class="schedule pt-5">
+          <h2 class="schedule-title">Calendario</h2>
+          <v-date-picker
+            @click:date="searchByCalendar"
+            style="border: none; margin-top: 0px !important"
+            show-adjacent-months
+            class="mt-4"
+          ></v-date-picker>
+        </div>
+      </div>
     </div>
 
     <!-- Modal -->
@@ -159,12 +171,19 @@ import lib from "../libs/function";
 import { required, minLength } from "vuelidate/lib/validators";
 export default {
   data: () => ({
+    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .substr(0, 10),
     textAlert: "",
     alertEvent: "success",
     showAlert: false,
     time: 5000,
     loading: false,
     dialog: false,
+    search: "",
+    debounce: 0,
+    events: {},
+    eventModal: {},
     defaultEditedItem: {
       zone_name: "",
       events: [],
@@ -173,8 +192,6 @@ export default {
       zone_name: "",
       events: [],
     },
-    events: {},
-    eventModal: {},
   }),
   validations: {
     editedItem: {
@@ -212,13 +229,41 @@ export default {
         this.$refs.top.scrollIntoView();
       }
     },
+
     close() {
       this.dialog = false;
     },
+
     async selectEvent(event) {
       this.dialog = true;
       this.eventModal = event;
     },
+
+    async searchByCalendar(date) {
+      this.loading = true;
+      let res = await axios.post("api/web/event/searchByCalendar", {
+        params: {
+          date: date,
+        },
+      });
+
+      this.events = res.data.events;
+
+      this.loading = false;
+    },
+
+    // searchEvent() {
+    //   clearTimeout(this.debounce);
+    //   this.debounce = setTimeout(() => {
+    //     let res = axios.post("api/web/event/searchEvents", {
+    //       params: {
+    //         search: this.search,
+    //       },
+    //     });
+    //     console.log(res);
+    //     // this.events = res.data.events;
+    //   }, 500);
+    // },
   },
 };
 </script>

@@ -90,6 +90,7 @@ Auth::routes(['verify' => true, 'login' => true, 'reset' => true, 'register' => 
 Route::get('/api/web/room/byPlaceName/{place}', [RoomsController::class, 'byPlaceName']);
 // Route::post('/api/web/zone/allZones', [ZonesController::class, 'allZones']);
 Route::post('/api/web/event/scheduleEvents', [EventsController::class, 'scheduleEvents']);
-Route::post('api/web/event/eventById', [EventsController::class, 'eventById']);
+Route::post('api/web/event/searchByCalendar', [EventsController::class, 'searchByCalendar']);
+Route::post('api/web/event/searchEvents', [EventsController::class, 'searchEvents']);
 
 Route::post('import', [ExcelController::class, 'import']);
