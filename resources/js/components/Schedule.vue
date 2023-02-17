@@ -22,8 +22,10 @@
               <div class="search-input">
                 <v-text-field
                   outlined
+                  prepend-inner-icon="mdi-magnify"
                   dense
-                  label="Busca tu actividad cultural preferida"
+                  filled
+                  placeholder="Busca tu actividad cultural preferida"
                   type="text"
                 ></v-text-field>
               </div>
@@ -118,7 +120,13 @@
               <p class="modal-event-title">{{ eventModal.event_name }}</p>
             </v-col>
             <v-col cols="12" md="12" sm="12">
-              <img src="/img/ballet.jpg" height="400px" width="100%" alt="" />
+              <img
+                :src="eventModal.cover_image"
+                height="400px"
+                width="100%"
+                alt=""
+                style="object-fit: cover"
+              />
             </v-col>
             <v-col cols="12" md="12" sm="12">
               <h5 class="fw-bold">Descripción del evento</h5>

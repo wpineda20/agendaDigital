@@ -79,6 +79,8 @@ class EventsController extends Controller
             $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
 
             $eventFile = asset($data['event_file']);
+        } else {
+            $eventFile = null;
         }
 
         if (FileController::verifyTypeImage($data['cover_image'])) {
@@ -185,13 +187,11 @@ class EventsController extends Controller
 
         $room = Room::where('room_name', $request->room_name)->first();
 
-        // dd($data);
-        // dd(substr($data['event_file'], 0, 20));
-        // substr($data['event_file'], 0, -1);
-
         if (substr($data['event_file'], 0, 20) == "data:application/pdf") {
 
-            $eventFile = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+
+            $eventFile = asset($data['event_file']);
         } else {
             $eventFile = $data['event_file'];
         }
@@ -200,7 +200,9 @@ class EventsController extends Controller
 
             $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-dHs") . '-cover', 'cover_image');
 
-            // $coverImage = asset($data['cover_image']);
+            $coverImage = asset($data['cover_image']);
+        } else {
+            $coverImage = $data['cover_image'];
         }
 
         Event::where('id', $data['id'])->update([
@@ -215,7 +217,7 @@ class EventsController extends Controller
             'description' => $data['description'],
             'site_url' => $data['site_url'],
             'event_file' => $eventFile,
-            'cover_image' => $data['cover_image'],
+            'cover_image' => $coverImage,
             'tariff' => $data['tariff'],
             'state' => "Pendiente",
         ]);

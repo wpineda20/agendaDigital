@@ -561,6 +561,17 @@ select:-webkit-autofill {
 .search-input{
     width: 60%;
 }
+.search-input .v-text-field--outlined.v-input--dense .v-label{
+    background-color: transparent !important;
+}
+.search-input .theme--light.v-text-field--outlined>.v-input__control>.v-input__slot fieldset{
+    border-color: transparent !important;
+}
+.search-input .theme--light.v-input,
+.theme--light.v-input input{
+    color: grey;
+    font-weight: bold;
+}
 .search-item{
     width: 10%;
     display: flex;
@@ -693,15 +704,14 @@ select:-webkit-autofill {
         width: 100%;
     }
     .card-schedule-body{
-        padding: 1.5rem 0rem;
+        padding: 1rem 0rem;
     }
     .card-content {
         display: flex;
-        align-items: center;
         flex-direction: column;
         gap: 15px;
-        // overflow: clip;
         height: 100%;
+        padding: 0 1rem;
     }
     .search-input {
         width: 100%;
