@@ -298,9 +298,6 @@ class EventsController extends Controller
      */
     public function searchByCalendar(Request $request)
     {
-        $date = $request->params['date'];
-        // dd($date);
-
         $events = Event::select(
             'events.*',
             'events.id as event_id',
@@ -309,14 +306,13 @@ class EventsController extends Controller
         )
             ->join('rooms', 'events.room_id', '=', 'rooms.id')
             ->join('places', 'rooms.place_id', '=', 'places.id')
-            ->whereDate('events.event_date', $date)
+            ->whereDate('events.event_date', $request->date)
             ->get();
 
         foreach ($events as $event) {
 
             $event->images = EventImages::where('id', $event->id)->get();
         }
-        // dd($events);
 
         return response()->json(['message' => 'success', 'events' => $events]);
     }
@@ -327,8 +323,7 @@ class EventsController extends Controller
      */
     public function searchEvents(Request $request)
     {
-        $event_name = $request->params['search'];
-        // dd($event_name);
+        $current_date = date('Y-m-d');
 
         $events = Event::select(
             'events.*',
@@ -338,10 +333,11 @@ class EventsController extends Controller
         )
             ->join('rooms', 'events.room_id', '=', 'rooms.id')
             ->join('places', 'rooms.place_id', '=', 'places.id')
+            ->whereDate('events.event_date', $current_date)
             ->where(
                 'events.event_name',
                 'like',
-                $event_name . '%'
+                $request->search . '%'
             )
             ->get();
 
@@ -349,7 +345,6 @@ class EventsController extends Controller
 
             $event->images = EventImages::where('id', $event->id)->get();
         }
-        // dd($events);
 
         return response()->json(['message' => 'success', 'events' => $events]);
     }

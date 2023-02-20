@@ -28,6 +28,13 @@ Route::get('/', function () {
     return view('home');
 });
 
+//Search Events
+Route::get('api/web/event/searchEvents', [EventsController::class, 'searchEvents']);
+//Events By Calendar
+Route::get('api/web/event/searchByCalendar', [EventsController::class, 'searchByCalendar']);
+//Current Date Events
+Route::get('/api/web/event/scheduleEvents', [EventsController::class, 'scheduleEvents']);
+
 Auth::routes(['verify' => true, 'remember_me' => false]);
 
 Route::group(['middleware' => ['auth', 'verified', 'log', 'throttle:web']], function () {
@@ -78,19 +85,16 @@ Route::group(['middleware' => ['auth', 'verified', 'log', 'throttle:web']], func
 
     //Reports
     Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
-
     //Excel
     Route::get('export', [ExcelController::class, 'export']);
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
+
+
 Auth::routes(['verify' => true, 'login' => true, 'reset' => true, 'register' => true]);
 
 Route::get('/api/web/room/byPlaceName/{place}', [RoomsController::class, 'byPlaceName']);
-// Route::post('/api/web/zone/allZones', [ZonesController::class, 'allZones']);
-Route::post('/api/web/event/scheduleEvents', [EventsController::class, 'scheduleEvents']);
-Route::post('api/web/event/searchByCalendar', [EventsController::class, 'searchByCalendar']);
-Route::post('api/web/event/searchEvents', [EventsController::class, 'searchEvents']);
 
 Route::post('import', [ExcelController::class, 'import']);

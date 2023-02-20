@@ -70,16 +70,16 @@
                       </p>
                       <img :src="event.cover_image" class="card-img" alt="" />
                       <p class="card-event-text">
-                        <span class="cast-name" v-if="event.cast_name"
+                        <span v-if="event.cast_name"
                           >{{ event.cast_name }} </span
                         ><br v-show="event.cast_name" />
-                        <span class="description" v-if="event.description"
+                        <span v-if="event.description"
                           >{{ event.description }} </span
                         ><br v-show="event.description" />
-                        <span class="place" v-if="event.place_name"
-                          >{{ event.place_name }} </span
+                        <span v-if="event.place_name && event.room_name"
+                          >{{ event.place_name }}, {{ event.room_name }} </span
                         ><br v-show="event.place_name" />
-                        <span class="hour" v-if="event.start_hour_event">{{
+                        <span v-if="event.start_hour_event">{{
                           event.start_hour_event
                         }}</span>
                       </p>
@@ -207,7 +207,7 @@ export default {
   methods: {
     async initialize() {
       this.loading = true;
-      let requests = [eventApi.post(`/scheduleEvents`)];
+      let requests = [eventApi.get(`/scheduleEvents`)];
       let responses = await Promise.all(requests).catch((error) => {
         this.updateAlert(true, "No fue posible obtener los registros.", "fail");
         this.redirectSessionFinished = lib.verifySessionFinished(
@@ -241,7 +241,7 @@ export default {
 
     async searchByCalendar(date) {
       this.loading = true;
-      let res = await axios.post("api/web/event/searchByCalendar", {
+      let res = await axios.get("api/web/event/searchByCalendar", {
         params: {
           date: date,
         },
@@ -252,18 +252,22 @@ export default {
       this.loading = false;
     },
 
-    // searchEvent() {
-    //   clearTimeout(this.debounce);
-    //   this.debounce = setTimeout(() => {
-    //     let res = axios.post("api/web/event/searchEvents", {
-    //       params: {
-    //         search: this.search,
-    //       },
-    //     });
-    //     console.log(res);
-    //     // this.events = res.data.events;
-    //   }, 500);
-    // },
+    async searchEvent() {
+      this.loading = true;
+
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(async () => {
+        let res = await axios.get("api/web/event/searchEvents", {
+          params: {
+            search: this.search,
+          },
+        });
+
+        this.events = res.data.events;
+
+        this.loading = false;
+      }, 500);
+    },
   },
 };
 </script>
