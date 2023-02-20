@@ -9,13 +9,14 @@
       class="mb-2"
     />
     <div class="schedule-content">
+      <!-- Left Schedule -->
       <div class="schedule-left">
         <div class="card-schedule">
           <!-- Schedule Banner -->
           <div class="card-schedule-header">
             <img class="card-image" src="/logos/Logo_GOES_horizontal_D.svg" />
           </div>
-          <!-- Schedule Banner -->
+          <!-- /.Schedule Banner -->
           <div class="card-schedule-body">
             <!-- Schedule Search -->
             <div class="card-search">
@@ -42,9 +43,12 @@
                 />
               </div>
             </div>
-            <!-- Schedule Search -->
+            <!-- /.Schedule Search -->
             <div class="scroll">
+              <!-- Loader -->
               <loader v-if="loading"> </loader>
+              <!-- /.Loader -->
+              <!-- No Events Text -->
               <v-col
                 cols="12"
                 sm="12"
@@ -56,7 +60,9 @@
                   No hay eventos programados para este día
                 </h4>
               </v-col>
+              <!-- /.No Events Text -->
               <div class="card-content" v-if="events.length != 0 && !loading">
+                <!-- Card Event -->
                 <div
                   class="card-item"
                   style="margin: 0px !important"
@@ -70,7 +76,7 @@
                       </p>
                       <img :src="event.cover_image" class="card-img" alt="" />
                       <p class="card-event-text">
-                        <span v-if="event.cast_name"
+                        <span class="cast-name" v-if="event.cast_name"
                           >{{ event.cast_name }} </span
                         ><br v-show="event.cast_name" />
                         <span v-if="event.description"
@@ -86,22 +92,28 @@
                     </v-card>
                   </a>
                 </div>
+                <!-- /.Card Event -->
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- Left /.Schedule -->
+      <!-- Right Schedule -->
       <div class="schedule-right">
         <div class="schedule pt-5">
           <h2 class="schedule-title">Calendario</h2>
+          <!-- Date Picke -->
           <v-date-picker
             @click:date="searchByCalendar"
             style="border: none; margin-top: 0px !important"
             show-adjacent-months
             class="mt-4"
           ></v-date-picker>
+          <!-- /.Date Picke -->
         </div>
       </div>
+      <!-- /.Right Schedule -->
     </div>
 
     <!-- Modal -->
@@ -128,7 +140,7 @@
             </v-col>
           </v-row>
           <v-row class="mx-auto" fluid>
-            <v-col cols="12" md="12" sm="12">
+            <v-col cols="12" md="12" sm="12" class="pt-0 pb-0">
               <p class="modal-event-title">{{ eventModal.event_name }}</p>
             </v-col>
             <v-col cols="12" md="12" sm="12">

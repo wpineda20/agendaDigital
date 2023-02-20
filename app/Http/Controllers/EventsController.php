@@ -323,7 +323,7 @@ class EventsController extends Controller
      */
     public function searchEvents(Request $request)
     {
-        $current_date = date('Y-m-d');
+        // $current_date = date('Y-m-d');
 
         $events = Event::select(
             'events.*',
@@ -333,7 +333,7 @@ class EventsController extends Controller
         )
             ->join('rooms', 'events.room_id', '=', 'rooms.id')
             ->join('places', 'rooms.place_id', '=', 'places.id')
-            ->whereDate('events.event_date', $current_date)
+            // ->whereDate('events.event_date', $current_date)
             ->where(
                 'events.event_name',
                 'like',

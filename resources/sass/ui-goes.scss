@@ -582,16 +582,21 @@ select:-webkit-autofill {
     // filter: invert(19%) sepia(13%) saturate(856%) hue-rotate(177deg) brightness(96%) contrast(90%);
     background-color: #F4F4F4;
 }
-.underline-title{
-    font-weight: 700;
-    font-size: 32px;
-    text-decoration: underline #095CE0 5px;
-}
+
 .card-event-title{
     font-weight: 700;
     line-height: 30px;
     font-size: 26px;
-    text-decoration: underline #095CE0 3px;
+    padding: 2px 0px;
+    position: relative;
+}
+.card-event-title:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border: 2px solid #095CE0;
+    width: 32px;
 }
 .card-content{
     display: grid;
@@ -632,11 +637,20 @@ select:-webkit-autofill {
     font-weight: 700;
 }
 .modal-event-title {
-    font-weight: 700;
+    font-weight: bold;
     line-height: 30px;
-    font-size: 40px;
-    text-decoration: underline #095CE0 3px;
-    margin-bottom: 0px;
+    font-size: 28px;
+    margin-bottom: 0;
+    padding: 4px 0px;
+    position: relative;
+}
+.modal-event-title:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border: 2px solid #095CE0;
+    width: 32px;
 }
 .modal-description{
     color: $grey-secondary-light;
@@ -705,7 +719,16 @@ td .v-btn--rounded{
     font-size: 28px;
     margin-bottom: 0;
     padding: 4px 20px;
-    text-decoration: underline #095CE0 3px;
+    position: relative;
+}
+
+.schedule-title:after {
+    content: "";
+    position: absolute;
+    left: 8%;
+    bottom: 0;
+    border: 3px solid #095CE0;
+    width: 32px;
 }
 // Scroll Bar
 
