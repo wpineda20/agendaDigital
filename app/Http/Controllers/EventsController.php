@@ -286,7 +286,7 @@ class EventsController extends Controller
 
         foreach ($scheduleEvents as $event) {
 
-            $event->images = EventImages::where('id', $event->id)->get();
+            $event->images = EventImages::where('event_id', $event->id)->get();
         }
 
         return response()->json(['message' => 'success', 'scheduleEvents' => $scheduleEvents]);
@@ -311,7 +311,7 @@ class EventsController extends Controller
 
         foreach ($events as $event) {
 
-            $event->images = EventImages::where('id', $event->id)->get();
+            $event->images = EventImages::where('event_id', $event->id)->get();
         }
 
         return response()->json(['message' => 'success', 'events' => $events]);
@@ -343,7 +343,7 @@ class EventsController extends Controller
 
         foreach ($events as $event) {
 
-            $event->images = EventImages::where('id', $event->id)->get();
+            $event->images = EventImages::where('event_id', $event->id)->get();
         }
 
         return response()->json(['message' => 'success', 'events' => $events]);

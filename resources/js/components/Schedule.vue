@@ -33,14 +33,7 @@
                 ></v-text-field>
               </div>
               <div class="search-item">
-                <img
-                  style="
-                    filter: invert(19%) sepia(13%) saturate(856%)
-                      hue-rotate(177deg) brightness(96%) contrast(90%);
-                    height: 45px;
-                  "
-                  src="/img/grid_view.svg"
-                />
+                <img class="search-img" src="/img/grid_view.svg" />
               </div>
             </div>
             <!-- /.Schedule Search -->
@@ -117,9 +110,9 @@
     </div>
 
     <!-- Modal -->
-    <v-dialog v-model="dialog" class="m-0 p-0" width="600px">
+    <v-dialog v-model="dialog" class="m-0 p-0" width="650px">
       <v-card>
-        <v-container>
+        <v-container class="modal-padding">
           <v-row fluid class="fluid">
             <v-col cols="12" md="12" sm="12">
               <a
@@ -144,16 +137,63 @@
               <p class="modal-event-title">{{ eventModal.event_name }}</p>
             </v-col>
             <v-col cols="12" md="12" sm="12">
-              <img
-                :src="eventModal.cover_image"
-                height="400px"
-                width="100%"
-                alt=""
-                style="object-fit: cover"
-              />
+              <div
+                id="carouselExampleControls"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img
+                      :src="eventModal.cover_image"
+                      style="height: 400px; object-fit: cover"
+                      class="d-block w-100"
+                      alt=""
+                    />
+                  </div>
+                  <div
+                    class="carousel-item"
+                    v-for="(img, index) in eventModal.images"
+                    :key="index"
+                  >
+                    <img
+                      :src="img.image_url"
+                      style="height: 400px; object-fit: cover"
+                      class="d-block w-100"
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselExampleControls"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExampleControls"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
             </v-col>
             <v-col cols="12" md="12" sm="12">
-              <h5 class="fw-bold">Descripción del evento</h5>
+              <h5 class="fw-bold" v-if="eventModal.description">
+                Descripción del evento
+              </h5>
               <p class="modal-description">{{ eventModal.description }}</p>
             </v-col>
             <div class="modal-items">
@@ -162,7 +202,7 @@
                   <span>Descarga de programa de mano</span>
                 </a>
               </div>
-              <div class="modal-shop">
+              <div class="modal-shop" v-if="eventModal.site_url">
                 <a :href="eventModal.site_url" target="_blank">
                   <img src="/img/shopping_cart.png" alt="" />
                 </a>
@@ -249,6 +289,7 @@ export default {
     async selectEvent(event) {
       this.dialog = true;
       this.eventModal = event;
+      console.log(this.eventModal);
     },
 
     async searchByCalendar(date) {

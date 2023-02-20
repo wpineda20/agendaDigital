@@ -579,10 +579,12 @@ select:-webkit-autofill {
     width: 10%;
     display: flex;
     justify-content: center;
-    // filter: invert(19%) sepia(13%) saturate(856%) hue-rotate(177deg) brightness(96%) contrast(90%);
+}
+.search-img{
+    height: 45px;
+    padding: 2px;
     background-color: #F4F4F4;
 }
-
 .card-event-title{
     font-weight: 700;
     line-height: 30px;
@@ -601,7 +603,6 @@ select:-webkit-autofill {
 .card-content{
     display: grid;
     grid-template-columns: 2fr 2fr;
-    // padding: 2;
     grid-row: auto auto;
     grid-row-gap: 20px;
     grid-column-gap: 20px;
@@ -625,10 +626,8 @@ select:-webkit-autofill {
     object-fit: cover;
 }
 .card-event-text{
-    // color: rgb(185, 184, 184);
     padding-top: 1rem;
     line-height: 1rem;
-    // color:grey;
     color: $grey-secondary-light;
     margin-bottom: 0px;
 }
@@ -639,9 +638,9 @@ select:-webkit-autofill {
 .modal-event-title {
     font-weight: bold;
     line-height: 30px;
-    font-size: 28px;
+    font-size: 40px;
     margin-bottom: 0;
-    padding: 4px 0px;
+    padding: 8px 0px;
     position: relative;
 }
 .modal-event-title:after {
@@ -684,6 +683,13 @@ select:-webkit-autofill {
 }
 .modal-shop img{
     filter: invert(94%) sepia(9%) saturate(157%) hue-rotate(185deg) brightness(87%) contrast(85%);
+}
+.modal-padding{
+    padding: 12px 35px
+}
+.carousel-control-prev,
+.carousel-control-next{
+    width: 6%;
 }
 
 // Calendar
@@ -786,6 +792,13 @@ td .v-btn--rounded{
         display: flex;
         justify-content: center;
     }
+    .modal-event-title {
+        font-size: 30px;
+    }
+    .modal-padding {
+        padding: 12px 12px
+    }
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
