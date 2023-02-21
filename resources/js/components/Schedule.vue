@@ -14,7 +14,7 @@
         <div class="card-schedule">
           <!-- Schedule Banner -->
           <div class="card-schedule-header">
-            <img class="card-image" src="/logos/Logo_GOES_horizontal_D.svg" />
+            <img class="card-image" src="/img/AgendaCultural-1.jpg" />
           </div>
           <!-- /.Schedule Banner -->
           <div class="card-schedule-body">

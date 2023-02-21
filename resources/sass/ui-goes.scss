@@ -538,7 +538,8 @@ select:-webkit-autofill {
 }
 .card-image{
     width: 100%;
-    height: 8rem;
+    height: 8.5rem;
+    object-fit: cover;
 }
 .schedule-left{
     width: 70%;
@@ -559,7 +560,7 @@ select:-webkit-autofill {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 2rem 2rem 4rem;
+    padding: 1.5rem 2rem 2rem 4rem;
 }
 .search-input{
     width: 60%;
