@@ -253,19 +253,18 @@
               </v-col>
               <!-- cover_image -->
               <!-- images -->
-              <!-- <v-col cols="12" sm="12" md="12">
-                <v-file-input
-                  @change="updateImage"
-                  accept="image/*" 
-                  placeholder="Imagenes del evento"
-                  prepend-icon="mdi-camera"
-                  multiple
-                  outlined
-                  show-size
-                  small-chips
-                  truncate-length="15"
-                ></v-file-input>
-              </v-col> -->
+              <v-col cols="12" sm="12" md="12">
+                <h6 class="mb-0 fw-bold text-dark">
+                  Adjuntar imagenes del evento.
+                </h6>
+                <span class="text-left">(Máximo 5MB | png, jpg, jpeg)</span>
+                <base-dropzone
+                  @change="updateFiles($event)"
+                  :removeAll="clearDropzone"
+                  @clearDropzone="updateClearDropzone($event)"
+                  @success="disableButton = false"
+                />
+              </v-col>
               <!-- images -->
             </v-row>
             <!-- Form -->
@@ -327,6 +326,7 @@
 import eventApi from "../apis/eventApi";
 import placeApi from "../apis/placeApi";
 import lib from "../libs/function";
+import fileLib from "../libs/function";
 // import roomApi from "../apis/roomApi";
 import axios from "axios";
 import {
@@ -375,7 +375,6 @@ export default {
         site_url: "",
         event_file: "",
         cover_image: "",
-        images: [],
         // color: "",
         // state: "",
       },
@@ -394,7 +393,6 @@ export default {
         site_url: "",
         event_file: "",
         cover_image: "",
-        images: [],
         // color: "",
         // state: "",
       },
@@ -408,7 +406,9 @@ export default {
       alertTimeOut: 0,
       rooms: [],
       places: [],
+      images: [],
       disponibility: false,
+      clearDropzone: false,
     };
   },
 
@@ -565,7 +565,7 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.selectedTab = 0;
       this.dialog = true;
-      console.log(this.editedItem);
+      
     },
 
     close() {
@@ -657,6 +657,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      
     },
 
     async deleteItemConfirm() {
@@ -746,6 +747,24 @@ export default {
         });
 
       this.rooms = data.rooms;
+    },
+    updateFiles(e) {
+      this.images = new FormData();
+      e.forEach((element, index) => {
+        const file = element;
+        const filename = element.name;
+        const ext = fileLib.getFileExtension(filename).toLowerCase();
+
+        if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "webp") {
+          console.log("El archivo debe tener un formato compatible");
+        }
+
+        console.log(this.images);
+        this.images.append("images[]", file);
+      });
+    },
+    updateClearDropzone(e) {
+      this.clearDropzone = e;
     },
   },
 };

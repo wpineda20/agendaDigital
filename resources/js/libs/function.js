@@ -7,4 +7,12 @@ export default {
         }
         return false;
     },
+    getFileExtension: (filename = "") => {
+        return (
+            filename.substring(
+                filename.lastIndexOf(".") + 1,
+                filename.length
+            ) || filename
+        );
+    },
 };

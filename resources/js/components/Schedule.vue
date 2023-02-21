@@ -37,7 +37,7 @@
               </div>
             </div>
             <!-- /.Schedule Search -->
-            <div class="scroll">
+            <!-- <div class="scroll"> -->
               <!-- Loader -->
               <loader v-if="loading"> </loader>
               <!-- /.Loader -->
@@ -87,7 +87,7 @@
                 </div>
                 <!-- /.Card Event -->
               </div>
-            </div>
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -110,11 +110,11 @@
     </div>
 
     <!-- Modal -->
-    <v-dialog v-model="dialog" class="m-0 p-0" width="650px">
+    <v-dialog v-model="dialog" class="m-0 p-0" width="600px">
       <v-card>
         <v-container class="modal-padding">
           <v-row fluid class="fluid">
-            <v-col cols="12" md="12" sm="12">
+            <v-col cols="12" md="12" sm="12" class="p-0">
               <a
                 class="no-decoration"
                 @click="close()"
@@ -143,22 +143,15 @@
                 data-bs-ride="carousel"
               >
                 <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img
-                      :src="eventModal.cover_image"
-                      style="height: 400px; object-fit: cover"
-                      class="d-block w-100"
-                      alt=""
-                    />
-                  </div>
                   <div
                     class="carousel-item"
                     v-for="(img, index) in eventModal.images"
                     :key="index"
+                    :class="{ active: index === 0 }"
                   >
                     <img
                       :src="img.image_url"
-                      style="height: 400px; object-fit: cover"
+                      style="height: 350px; object-fit: cover"
                       class="d-block w-100"
                       alt=""
                     />
@@ -326,4 +319,7 @@ export default {
 </script>
 
 <style>
+.active {
+  display: block;
+}
 </style>

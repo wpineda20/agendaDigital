@@ -36,8 +36,12 @@ class EventsController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $events = Event::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $events = Encrypt::encryptObject($events, "id");
 
+        foreach ($events as $event) {
+            $event->images = EventImages::where('event_id', $event->id)->get();
+        }
+
+        $events = Encrypt::encryptObject($events, "id");
         $total = Event::counterPagination($search);
 
         return response()->json([
@@ -183,6 +187,7 @@ class EventsController extends Controller
      */
     public function update(Request $request)
     {
+        // dd($request);
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $room = Room::where('room_name', $request->room_name)->first();
