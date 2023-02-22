@@ -94,7 +94,7 @@
       <!-- Left /.Schedule -->
       <!-- Right Schedule -->
       <div class="schedule-right">
-        <div class="schedule pt-5">
+        <div class="schedule">
           <h2 class="schedule-title">Calendario</h2>
           <!-- Date Picke -->
           <v-date-picker

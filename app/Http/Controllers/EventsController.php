@@ -187,7 +187,6 @@ class EventsController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request);
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $room = Room::where('room_name', $request->room_name)->first();
@@ -270,7 +269,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * All Events
      *
      * @return \Illuminate\Http\Response
      */
@@ -297,7 +296,7 @@ class EventsController extends Controller
         return response()->json(['message' => 'success', 'scheduleEvents' => $scheduleEvents]);
     }
     /**
-     * Display a listing of the resource.
+     * Events By Calendar Click.
      *
      * @return \Illuminate\Http\Response
      */
@@ -322,14 +321,12 @@ class EventsController extends Controller
         return response()->json(['message' => 'success', 'events' => $events]);
     }
     /**
-     * Display a listing of the resource.
+     * Events By Search Input.
      *
      * @return \Illuminate\Http\Response
      */
     public function searchEvents(Request $request)
     {
-        // $current_date = date('Y-m-d');
-
         $events = Event::select(
             'events.*',
             'events.id as event_id',
@@ -338,7 +335,6 @@ class EventsController extends Controller
         )
             ->join('rooms', 'events.room_id', '=', 'rooms.id')
             ->join('places', 'rooms.place_id', '=', 'places.id')
-            // ->whereDate('events.event_date', $current_date)
             ->where(
                 'events.event_name',
                 'like',
