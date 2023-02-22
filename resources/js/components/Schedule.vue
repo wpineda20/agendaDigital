@@ -72,15 +72,15 @@
                         <span class="cast-name" v-if="event.cast_name"
                           >{{ event.cast_name }} </span
                         ><br v-show="event.cast_name" />
-                        <span v-if="event.description"
+                        <!-- <span v-if="event.description"
                           >{{ event.description }} </span
-                        ><br v-show="event.description" />
+                        ><br v-show="event.description" /> -->
                         <span v-if="event.place_name && event.room_name"
                           >{{ event.place_name }}, {{ event.room_name }} </span
                         ><br v-show="event.place_name" />
-                        <span v-if="event.start_hour_event">{{
+                        <span v-if="event.start_hour_event && event.end_hour_event">{{
                           event.start_hour_event
-                        }}</span>
+                        }} - {{ event.end_hour_event }} </span>
                       </p>
                     </v-card>
                   </a>
@@ -284,6 +284,7 @@ export default {
     hourFormat(){
       this.events.forEach(event => {
         event.start_hour_event = moment(event.start_hour_event, "hh:mm").format('LT');
+        event.end_hour_event = moment(event.end_hour_event, "hh:mm").format('LT');
       });
     },
 
