@@ -49,7 +49,7 @@
                 class="text-center"
                 v-if="events.length == 0 && !loading"
               >
-                <h4 class="fw-bold">
+                <h4 class="fw-bold mb-3">
                   No hay eventos programados para este día
                 </h4>
               </v-col>
@@ -192,7 +192,7 @@
             <div class="modal-items">
               <div class="modal-button" v-if="eventModal.event_file">
                 <a :href="eventModal.event_file" download="Programa de mano">
-                  <span>Descarga de programa de mano</span>
+                  <span>Programa de mano</span>
                 </a>
               </div>
               <div class="modal-shop" v-if="eventModal.site_url">
@@ -210,6 +210,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import axios from "axios";
 import eventApi from "../apis/eventApi";
 import lib from "../libs/function";
@@ -262,6 +263,7 @@ export default {
       });
 
       this.events = responses[0].data.scheduleEvents;
+      this.hourFormat();
       this.loading = false;
     },
 
@@ -279,10 +281,15 @@ export default {
       this.dialog = false;
     },
 
+    hourFormat(){
+      this.events.forEach(event => {
+        event.start_hour_event = moment(event.start_hour_event, "hh:mm").format('LT');
+      });
+    },
+
     async selectEvent(event) {
       this.dialog = true;
       this.eventModal = event;
-      console.log(this.eventModal);
     },
 
     async searchByCalendar(date) {
@@ -294,7 +301,7 @@ export default {
       });
 
       this.events = res.data.events;
-
+      this.hourFormat();
       this.loading = false;
     },
 
@@ -310,7 +317,7 @@ export default {
         });
 
         this.events = res.data.events;
-
+        this.hourFormat();  
         this.loading = false;
       }, 500);
     },

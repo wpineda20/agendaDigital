@@ -342,7 +342,7 @@ class EventsController extends Controller
             ->where(
                 'events.event_name',
                 'like',
-                $request->search . '%'
+                '%' . $request->search . '%'
             )
             ->get();
 

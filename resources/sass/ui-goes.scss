@@ -22,6 +22,7 @@ body {
 main {
     min-height: 80vh;
     background-color: $body-bg;
+    // background-color: #FEFFFF;
 }
 
 header,
@@ -576,6 +577,9 @@ select:-webkit-autofill {
     color: grey;
     font-weight: bold;
 }
+.v-date-picker-header__value .accent--text button:hover{
+    color: #000000;
+}
 .search-item{
     width: 10%;
     display: flex;
@@ -615,8 +619,9 @@ select:-webkit-autofill {
 .card-events{
     padding: 0.5rem 1.5rem;
     border-radius: 0px !important;
+    // border-radius: 10px;
     box-shadow: none !important;
-    border: 2px solid lightgray !important;
+    border: 2px solid #F4F4F4 !important;
     height: 100%;
     width: 100%;
     cursor: pointer;
@@ -634,7 +639,7 @@ select:-webkit-autofill {
     margin-bottom: 0px;
 }
 .card-event-text .cast-name{
-    color: black !important;
+    color: #000000 !important;
     font-weight: 700;
 }
 .modal-event-title {
@@ -662,18 +667,25 @@ select:-webkit-autofill {
     padding: 12px 12px;
 }
 .modal-button{
-    background-color: rgb(238, 238, 238);
-    color: $grey-secondary-light;
+    // background-color: rgb(238, 238, 238);
+    background-color: #095CE0;
+    color: $white;
     display: flex;
     line-height: 20px;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 10px;
+    border-radius: 50px;
     font-size: 16px;
     width: 200px;
     text-align: center;
     font-weight: 500;
+    letter-spacing: 1px;
+    text-decoration: none;
+    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 15%);
+}
+.modal-button a:hover{
+    color: $white !important;
 }
 .modal-shop{
     display: flex;
@@ -681,10 +693,14 @@ select:-webkit-autofill {
     align-items: center;
     border-radius: 10px;
     padding: 10px;
-    background-color: rgb(238, 238, 238);
+    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 15%);
+    background-color: #095CE0;
+    // background-color: rgb(238, 238, 238);
 }
 .modal-shop img{
-    filter: invert(94%) sepia(9%) saturate(157%) hue-rotate(185deg) brightness(87%) contrast(85%);
+    height: 35px;
+    filter: invert(100%) sepia(0%) saturate(5225%) hue-rotate(29deg) brightness(105%) contrast(96%);
+    // filter: invert(94%) sepia(9%) saturate(157%) hue-rotate(185deg) brightness(87%) contrast(85%);
 }
 .modal-padding{
     padding: 12px 35px
@@ -700,7 +716,8 @@ select:-webkit-autofill {
     display: none !important;
 }
 .v-date-picker-header, .v-date-picker-table {
-    background-color: #F4F7FD !important;
+    background-color: $body-bg !important;
+    // background-color: transparent !important;
 }
 .theme--light.v-date-picker-table th{
     color: #095CE0 !important;

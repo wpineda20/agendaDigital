@@ -113,6 +113,7 @@
         <!-- Sidebar -->
 
         <!-- Home Section -->
+        @auth
         <div class="home-section">
             <div class="home-content pt-5 pb-5">
                 <div class="container-fluid">
@@ -200,6 +201,7 @@
                 </div>
             </div>
         </div>
+        @endauth
         <!-- Home Section -->
 
         <!-- Main -->
@@ -207,10 +209,11 @@
             @yield('content')
         </main>
         <!-- Main -->
-
+        @auth
         <!-- Footer  -->
         <footer-vue />
         <!-- Footer  -->
+        @endauth
     </div>
 
     <!-- Scripts -->
