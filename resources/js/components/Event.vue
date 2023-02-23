@@ -182,7 +182,7 @@
                 <h6 class="mb-0 fw-bold text-dark">
                   Adjuntar imagenes del evento.
                 </h6>
-                <span class="text-left">(Máximo 5MB | png, jpg, jpeg)</span>
+                <span class="text-left">(Mínimo 2 | Máximo 5 imagenes)</span>
               </v-col>
 
               <v-col class="pt-0 pb-0">
@@ -239,7 +239,11 @@
                       </h3>
                       <v-row>
                         <!-- Image URL -->
-                        <v-col cols="12" sm="12" md="12" style="padding: 1rem 8.5rem">
+                        <v-col cols="12" sm="12" md="12" class="text-center">
+                          <h6 class="mb-0 fw-bold text-dark">
+                            Adjuntar imagenes del evento.
+                          </h6>
+                          <span class="">(Máximo 5MB | png, jpg, jpeg)</span>
                           <input-image v-model="$v.image.image_url.$model" :validation="$v.image.image_url"
                             :image="image.image_url" @update-image="image.image_url = $event" />
                         </v-col>
