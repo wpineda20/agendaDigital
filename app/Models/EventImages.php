@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EventImages extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $table = 'event_images';
+    // protected $table = 'event_images';
 
-    public $incrementing = true;
+    // public $incrementing = true;
 
-    protected $data = ['deleted_at'];
+    // protected $data = ['deleted_at'];
 
     protected $fillable = [
         'id',
@@ -25,11 +25,11 @@ class EventImages extends Model
         'deleted_at',
     ];
 
-    public $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
+    // public $hidden = [
+    //     'created_at',
+    //     'updated_at',
+    //     'deleted_at',
+    // ];
 
-    public $timestamps = true;
+    // public $timestamps = false;
 }

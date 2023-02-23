@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Event;
 use App\Models\EventImages;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use DB;
 use Crypt;
@@ -61,7 +62,6 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-
         //Validation schedules
         $disponibility = $this->validateSchedules($request->all());
 
@@ -80,7 +80,7 @@ class EventsController extends Controller
 
         if ($data['event_file']) {
 
-            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-' . Str::random(6), 'event_files');
 
             $eventFile = asset($data['event_file']);
         } else {
@@ -89,7 +89,7 @@ class EventsController extends Controller
 
         if (FileController::verifyTypeImage($data['cover_image'])) {
 
-            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-dHs") . '-cover', 'cover_image');
+            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-d") . '-' . Str::random(6), 'cover_images');
 
             $coverImage = asset($data['cover_image']);
         }
@@ -112,6 +112,21 @@ class EventsController extends Controller
         ]);
 
         $events->save();
+
+
+        foreach ($data['images'] as $value) {
+
+            if (FileController::verifyTypeImage($value['image_url'])) {
+
+                $value['image_url'] = FileController::base64ToFile($value['image_url'], date("Y-m-d") . '-' . Str::random(6), 'slider_images');
+
+                $sliderImage = asset($value['image_url']);
+            }
+            EventImages::create([
+                'event_id' => $events->id,
+                'image_url' => $sliderImage,
+            ]);
+        }
 
         return response()->json([
             "status" => 200,
@@ -193,7 +208,7 @@ class EventsController extends Controller
 
         if (substr($data['event_file'], 0, 20) == "data:application/pdf") {
 
-            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-dHs") . '-file', 'event_file');
+            $data['event_file'] = FileController::base64ToFile($data['event_file'], date("Y-m-d") . '-' . Str::random(6), 'event_files');
 
             $eventFile = asset($data['event_file']);
         } else {
@@ -202,7 +217,7 @@ class EventsController extends Controller
 
         if (FileController::verifyTypeImage($data['cover_image'])) {
 
-            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-dHs") . '-cover', 'cover_image');
+            $data['cover_image'] = FileController::base64ToFile($data['cover_image'], date("Y-m-d") . '-' . Str::random(6), 'cover_images');
 
             $coverImage = asset($data['cover_image']);
         } else {
@@ -225,6 +240,21 @@ class EventsController extends Controller
             'tariff' => $data['tariff'],
             'state' => "Pendiente",
         ]);
+
+        EventImages::where('event_id', $data['id'])->delete();
+
+        foreach ($data['images'] as $value) {
+            if (FileController::verifyTypeImage($value['image_url'])) {
+
+                $value['image_url'] = FileController::base64ToFile($value['image_url'], date("Y-m-d") . '-' . Str::random(6), 'slider_images');
+
+                $sliderImage = asset($value['image_url']);
+            }
+            EventImages::create([
+                'event_id' => $data['id'],
+                'image_url' => $sliderImage,
+            ]);
+        }
 
         return response()->json([
             "status" => 200,

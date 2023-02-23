@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id')->constrained('events');
             $table->text('image_url')->nullable();
-            $table->softDeletes();
+            // $table->softDeletes();
             $table->timestamps();
         });
     }
