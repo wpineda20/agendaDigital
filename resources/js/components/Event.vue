@@ -245,7 +245,8 @@
                           </h6>
                           <span class="">(Máximo 5MB | png, jpg, jpeg)</span>
                           <input-image v-model="$v.image.image_url.$model" :validation="$v.image.image_url"
-                            :image="image.image_url" @update-image="image.image_url = $event" />
+                            :image="image.image_url" @update-image="image.image_url = $event"
+                            style="display: flex; justify-content: center;" />
                         </v-col>
                         <!-- Image URL -->
                       </v-row>
